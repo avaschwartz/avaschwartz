@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-# welcome to my little corner ♡
+# welcome to portfolio ♡
 
 hi!! i'm ava ✿
 
