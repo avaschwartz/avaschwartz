@@ -17,115 +17,276 @@ Finally, I added a small fan that can be turned on after the correct password is
 
 Final code:
 
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+#include <Keypad.h>
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+// -------------------------
+// KEYPAD
+// -------------------------
 
-const int buzzer = 8;
+const byte ROWS = 4;
+const byte COLS = 4;
 
-#define C4 262
-#define D4 294
-#define E4 330
-#define F4 349
-#define G4 392
-#define A4 440
-#define B4 494
-#define C5 523
-
-int melody[] = {
-  C4, E4, G4, G4,
-  A4, G4, E4, D4,
-  C4, E4, G4, A4,
-  G4, E4, D4, C4
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
 };
 
-int durations[] = {
-  300, 300, 300, 500,
-  300, 300, 400, 400,
-  300, 300, 300, 500,
-  300, 300, 400, 600
-};
+byte rowPins[ROWS] = {9, 8, 7, 6};
+byte colPins[COLS] = {5, 4, 3, 2};
 
-const int numberOfNotes = sizeof(melody) / sizeof(melody[0]);
+Keypad keypad = Keypad(
+  makeKeymap(keys),
+  rowPins,
+  colPins,
+  ROWS,
+  COLS
+);
 
-String lyrics[] = {
-  "We build and we",
-  "dream together",
-  "Lights glow in the",
-  "digital weather",
-  "One small idea",
-  "starts to grow",
-  "Press play and",
-  "watch it go!"
-};
+// -------------------------
+// OUTPUT PINS
+// -------------------------
 
-const int numberOfLines = sizeof(lyrics) / sizeof(lyrics[0]);
+const int greenLED = 11;
+const int redLED = 12;
+const int buzzerPin = 13;
+
+// -------------------------
+// PASSWORD
+// -------------------------
+
+String correctCode = "1234";
+String enteredCode = "";
+
+// -------------------------
+// CHANGE PASSWORD MODE
+// -------------------------
+
+bool changingPassword = false;
+bool checkingOldPassword = false;
+
+// -------------------------
+// SETUP
+// -------------------------
 
 void setup() {
-  pinMode(buzzer, OUTPUT);
 
-  lcd.init();
-  lcd.backlight();
+  pinMode(greenLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
 
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Arduino Song");
-  lcd.setCursor(0, 1);
-  lcd.print("Starting...");
-  delay(1500);
+  digitalWrite(greenLED, LOW);
+  digitalWrite(redLED, LOW);
 }
+
+// -------------------------
+// MAIN LOOP
+// -------------------------
 
 void loop() {
 
-  for (int i = 0; i < numberOfNotes; i++) {
+  char key = keypad.getKey();
 
-    int lyricNumber = i / 2;
+  if (key) {
 
-    if (lyricNumber < numberOfLines) {
-      showLyrics(lyrics[lyricNumber]);
+    // -------------------------
+    // A = CHANGE PASSWORD
+    // -------------------------
+
+    if (key == 'A') {
+
+      enteredCode = "";
+      changingPassword = true;
+      checkingOldPassword = true;
+
+      // Beep to show change mode
+      tone(buzzerPin, 600);
+      delay(150);
+      noTone(buzzerPin);
+
+      return;
     }
 
-    tone(buzzer, melody[i], durations[i]);
+    // -------------------------
+    // CLEAR
+    // -------------------------
 
-    delay(durations[i]);
+    if (key == '*') {
 
-    noTone(buzzer);
+      enteredCode = "";
+
+      tone(buzzerPin, 300);
+      delay(100);
+      noTone(buzzerPin);
+
+      return;
+    }
+
+    // -------------------------
+    // ENTER
+    // -------------------------
+
+    if (key == '#') {
+
+      // =========================
+      // CHANGE PASSWORD MODE
+      // =========================
+
+      if (changingPassword) {
+
+        // Check the old password
+        if (checkingOldPassword) {
+
+          if (enteredCode == correctCode) {
+
+            // Old password correct
+            checkingOldPassword = false;
+            enteredCode = "";
+
+            tone(buzzerPin, 1000);
+            delay(150);
+            noTone(buzzerPin);
+
+          } else {
+
+            // Old password incorrect
+            tone(buzzerPin, 400);
+            delay(200);
+            noTone(buzzerPin);
+
+            changingPassword = false;
+            checkingOldPassword = false;
+            enteredCode = "";
+          }
+
+        }
+
+        // Save the new password
+        else {
+
+          if (enteredCode.length() > 0) {
+
+            correctCode = enteredCode;
+
+            // Success sound
+            tone(buzzerPin, 1200);
+            delay(150);
+            noTone(buzzerPin);
+
+            delay(100);
+
+            tone(buzzerPin, 1500);
+            delay(150);
+            noTone(buzzerPin);
+          }
+
+          changingPassword = false;
+          checkingOldPassword = false;
+          enteredCode = "";
+        }
+
+        return;
+      }
+
+      // =========================
+      // NORMAL PASSWORD CHECK
+      // =========================
+
+      if (enteredCode == correctCode) {
+
+        // GREEN LED
+        digitalWrite(greenLED, HIGH);
+        digitalWrite(redLED, LOW);
+
+        // Success beep
+        tone(buzzerPin, 1200);
+        delay(200);
+        noTone(buzzerPin);
+
+        delay(200);
+
+        // PLAY SONG
+        playSong();
+
+        // Turn green LED off
+        digitalWrite(greenLED, LOW);
+
+      } else {
+
+        // RED LED
+        digitalWrite(redLED, HIGH);
+        digitalWrite(greenLED, LOW);
+
+        // Wrong password sound
+        tone(buzzerPin, 400);
+        delay(200);
+        noTone(buzzerPin);
+
+        delay(100);
+
+        tone(buzzerPin, 400);
+        delay(200);
+        noTone(buzzerPin);
+
+        delay(1000);
+
+        digitalWrite(redLED, LOW);
+      }
+
+      enteredCode = "";
+      return;
+    }
+
+    // -------------------------
+    // NORMAL NUMBER KEY
+    // -------------------------
+
+    enteredCode += key;
+
+    // Short beep for every key
+    tone(buzzerPin, 800);
+    delay(50);
+    noTone(buzzerPin);
+  }
+}
+
+
+// =====================================================
+// SONG
+// =====================================================
+
+void playSong() {
+
+  // This is an ORIGINAL example melody.
+  // You can replace these notes with a melody
+  // from your own composition.
+
+  int melody[] = {
+    262, 294, 330, 348,
+    392, 349, 330, 294,
+    262, 330, 392, 440
+  };
+
+  int noteLength[] = {
+    300, 300, 300, 300,
+    400, 300, 300, 300,
+    400, 300, 300, 600
+  };
+
+  int numberOfNotes = 12;
+
+  for (int i = 0; i < numberOfNotes; i++) {
+
+    tone(buzzerPin, melody[i]);
+
+    delay(noteLength[i]);
+
+    noTone(buzzerPin);
+
     delay(50);
   }
-
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Song complete!");
-  lcd.setCursor(0, 1);
-  lcd.print("Replay...");
-
-  delay(2000);
 }
-
-void showLyrics(String text) {
-
-  lcd.clear();
-
-  if (text.length() <= 16) {
-    lcd.setCursor(0, 1);
-    lcd.print(text);
-    return;
-  }
-
-  String scrollingText = "                " + text + "                ";
-
-  for (int position = 0;
-       position <= scrollingText.length() - 16;
-       position++) {
-
-    lcd.setCursor(0, 1);
-    lcd.print(scrollingText.substring(position, position + 16));
-
-    delay(120);
-  }
-}
-
 Result:
 <img src="https://raw.githubusercontent.com/avaschwartz/avaschwartz/main/IMG_4491.jpeg" alt="OG Design">
 <img src="https://raw.githubusercontent.com/avaschwartz/avaschwartz/main/IMG_4507.jpeg" alt="Final Design">
