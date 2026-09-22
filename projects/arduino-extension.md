@@ -15,6 +15,117 @@ One thing that did not work at first was getting both LEDs to work correctly. I 
 I also added a changeable password feature. Pressing A starts password-change mode. The current password has to be entered first, and then the new password is entered twice so the Arduino can check that it matches.
 Finally, I added a small fan that can be turned on after the correct password is entered. I learned that the fan needs to be controlled using a transistor and an external power source rather than being powered directly from an Arduino pin.
 
+Final code:
+
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const int buzzer = 8;
+
+#define C4 262
+#define D4 294
+#define E4 330
+#define F4 349
+#define G4 392
+#define A4 440
+#define B4 494
+#define C5 523
+
+int melody[] = {
+  C4, E4, G4, G4,
+  A4, G4, E4, D4,
+  C4, E4, G4, A4,
+  G4, E4, D4, C4
+};
+
+int durations[] = {
+  300, 300, 300, 500,
+  300, 300, 400, 400,
+  300, 300, 300, 500,
+  300, 300, 400, 600
+};
+
+const int numberOfNotes = sizeof(melody) / sizeof(melody[0]);
+
+String lyrics[] = {
+  "We build and we",
+  "dream together",
+  "Lights glow in the",
+  "digital weather",
+  "One small idea",
+  "starts to grow",
+  "Press play and",
+  "watch it go!"
+};
+
+const int numberOfLines = sizeof(lyrics) / sizeof(lyrics[0]);
+
+void setup() {
+  pinMode(buzzer, OUTPUT);
+
+  lcd.init();
+  lcd.backlight();
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Arduino Song");
+  lcd.setCursor(0, 1);
+  lcd.print("Starting...");
+  delay(1500);
+}
+
+void loop() {
+
+  for (int i = 0; i < numberOfNotes; i++) {
+
+    int lyricNumber = i / 2;
+
+    if (lyricNumber < numberOfLines) {
+      showLyrics(lyrics[lyricNumber]);
+    }
+
+    tone(buzzer, melody[i], durations[i]);
+
+    delay(durations[i]);
+
+    noTone(buzzer);
+    delay(50);
+  }
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Song complete!");
+  lcd.setCursor(0, 1);
+  lcd.print("Replay...");
+
+  delay(2000);
+}
+
+void showLyrics(String text) {
+
+  lcd.clear();
+
+  if (text.length() <= 16) {
+    lcd.setCursor(0, 1);
+    lcd.print(text);
+    return;
+  }
+
+  String scrollingText = "                " + text + "                ";
+
+  for (int position = 0;
+       position <= scrollingText.length() - 16;
+       position++) {
+
+    lcd.setCursor(0, 1);
+    lcd.print(scrollingText.substring(position, position + 16));
+
+    delay(120);
+  }
+}
+
 Result:
 <img src="https://raw.githubusercontent.com/avaschwartz/avaschwartz/main/IMG_4491.jpeg" alt="OG Design">
 <img src="https://raw.githubusercontent.com/avaschwartz/avaschwartz/main/IMG_4507.jpeg" alt="Final Design">
