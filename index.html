@@ -1,486 +1,575 @@
-```css
-/* ================================
-   GENERAL
-================================ */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-* {
-    box-sizing: border-box;
-}
+    <title>Ava | Innovator Journal</title>
 
-html {
-    scroll-behavior: smooth;
-}
+    <link rel="stylesheet" href="style.css">
+</head>
 
-body {
+<body>
 
-    margin: 0;
+    <!-- NAVIGATION -->
+    <header>
+        <div class="logo">AVA</div>
 
-    background: #0b1020;
+        <nav>
+            <a href="#about">About</a>
+            <a href="#project">Project</a>
+            <a href="#process">Process</a>
+            <a href="#reflection">Reflection</a>
+        </nav>
+    </header>
 
-    color: #f5f7fb;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    <!-- INTRO -->
+    <section class="intro" id="about">
 
-    line-height: 1.6;
-}
+        <div class="eyebrow">Innovator Journal</div>
 
+        <h1>
+            Hi, I'm <span>Ava.</span>
+        </h1>
 
-/* ================================
-   NAVIGATION
-================================ */
+        <p class="lead">
+            Welcome to my Innovator Journal. This website documents my Arduino
+            project, what I learned, the challenges I faced, and how I could
+            use my new skills to create something useful in the future.
+        </p>
 
-header {
+    </section>
 
-    border-bottom:
-        1px solid
-        rgba(255,255,255,0.1);
 
-    background: #0b1020;
+    <!-- ABOUT THE PROJECT -->
+    <section class="about">
 
-}
+        <div class="grid">
 
-nav {
+            <div class="card">
+                <h2>Skill I'm Building On</h2>
 
-    max-width: 1100px;
+                <p>
+                    The skill I am building on is digital output. In class,
+                    I learned how to control an Arduino by making an LED flash
+                    off and on. I wanted to take this a step further by making
+                    the Arduino control something more interesting than just
+                    an LED.
+                </p>
+            </div>
 
-    margin: auto;
 
-    padding: 22px 25px;
+            <div class="card">
+                <h2>Why I Chose It</h2>
 
-    display: flex;
+                <p>
+                    I decided to learn how to use a piezo buzzer because I was
+                    interested in how Arduino can combine electronics and
+                    programming to create something interactive. I also wanted
+                    to learn how different notes can be created using code.
+                </p>
+            </div>
 
-    justify-content: space-between;
 
-    align-items: center;
+            <div class="card">
+                <h2>My Components</h2>
 
-}
+                <div class="chips">
+                    <span class="chip">🔊 Piezo Buzzer</span>
+                    <span class="chip">⌨️ Keypad</span>
+                    <span class="chip">🔌 Arduino</span>
+                    <span class="chip">💻 Code</span>
+                </div>
+            </div>
 
-.logo {
 
-    color: white;
+            <div class="card">
+                <h2>What I Learned</h2>
 
-    text-decoration: none;
+                <ul class="goals">
+                    <li>How digital output works</li>
+                    <li>How to connect a piezo buzzer</li>
+                    <li>How different frequencies create different notes</li>
+                    <li>How Arduino code can control electronics</li>
+                </ul>
+            </div>
 
-    font-weight: bold;
+        </div>
 
-    letter-spacing: 1px;
+    </section>
 
-}
 
-.nav-links {
+    <!-- PROJECT HERO -->
+    <section class="hero" id="project">
 
-    display: flex;
+        <div class="eyebrow">Arduino Project</div>
 
-    gap: 30px;
+        <h2>
+            Piezo Buzzer<br>
+            & Keypad
+        </h2>
 
-}
+        <p>
+            Taking what I learned about digital output and using it to create
+            a more interactive Arduino project.
+        </p>
 
-.nav-links a {
+    </section>
 
-    color: #aeb8cc;
 
-    text-decoration: none;
+    <!-- PROJECT INFORMATION -->
+    <section class="section">
 
-    transition: 0.2s;
+        <div class="section-head">
+            <h2>My Project</h2>
 
-}
+            <p>
+                Digital Output Extension
+            </p>
+        </div>
 
-.nav-links a:hover {
 
-    color: #6ee7b7;
+        <div class="unit-intro">
 
-}
+            <div class="eyebrow">Project Goal</div>
 
+            <h2>Making Arduino Play Music</h2>
 
-/* ================================
-   MAIN
-================================ */
+            <p>
+                I started with what I already knew about digital output from
+                controlling an LED. Instead of only turning an LED on and off,
+                I wanted my Arduino to produce sounds. I chose a piezo buzzer
+                and a keypad so that the project could become more interactive.
+            </p>
 
-main {
+        </div>
 
-    max-width: 1100px;
 
-    margin: auto;
+        <div class="two-col">
 
-    padding: 0 25px 80px;
+            <div class="info-box">
 
-}
+                <h3>What I Built On</h3>
 
+                <p>
+                    In class, I learned how to use digital output to control
+                    an LED. I used that knowledge as the starting point for
+                    learning how Arduino can control a piezo buzzer.
+                </p>
 
-/* ================================
-   HERO
-================================ */
+            </div>
 
-.hero {
 
-    min-height: 650px;
+            <div class="info-box">
 
-    display: grid;
+                <h3>New Components</h3>
 
-    grid-template-columns:
-        1.2fr
-        0.8fr;
+                <p>
+                    The new components I used were a piezo buzzer and a
+                    keypad. The keypad allows the project to receive input,
+                    while the piezo buzzer creates the output.
+                </p>
 
-    align-items: center;
+            </div>
 
-    gap: 70px;
+        </div>
 
-}
+    </section>
 
-.small-title {
 
-    color: #6ee7b7;
+    <!-- RESEARCH -->
+    <section class="section">
 
-    font-size: 13px;
+        <div class="section-head">
 
-    font-weight: bold;
+            <h2>Research</h2>
 
-    letter-spacing: 3px;
+            <p>Learning how the components work</p>
 
-    text-transform: uppercase;
+        </div>
 
-}
 
-.hero h1 {
+        <div class="two-col">
 
-    font-size:
-        clamp(
-            55px,
-            8vw,
-            90px
-        );
+            <div class="info-box">
 
-    line-height: 0.95;
+                <h3>Piezo Buzzer</h3>
 
-    letter-spacing: -4px;
+                <p>
+                    I researched how to connect a piezo buzzer to an Arduino.
+                    I learned that the <strong>tone()</strong> function can
+                    make the buzzer play different frequencies. Higher and
+                    lower frequencies create different musical notes.
+                </p>
 
-    margin: 15px 0 30px;
+            </div>
 
-}
 
-.hero h1 span {
+            <div class="info-box">
 
-    color: #6ee7b7;
+                <h3>My Sources</h3>
 
-}
+                <p>
+                    I used ChatGPT and Arduino as sources while researching
+                    how the piezo buzzer works and how it can be controlled
+                    with Arduino code.
+                </p>
 
-.hero p {
+                <span class="source">
+                    Sources: ChatGPT & Arduino
+                </span>
 
-    color: #aeb8cc;
+            </div>
 
-    max-width: 650px;
+        </div>
 
-    font-size: 18px;
+    </section>
 
-}
 
+    <!-- PROCESS -->
+    <section class="section" id="process">
 
-/* ================================
-   BUTTONS
-================================ */
+        <div class="section-head">
 
-.buttons {
+            <h2>My Process</h2>
 
-    display: flex;
+            <p>From experimenting to building</p>
 
-    gap: 15px;
+        </div>
 
-    margin-top: 30px;
 
-    flex-wrap: wrap;
+        <div class="timeline">
 
-}
 
-.button,
-.button-outline {
+            <!-- STEP 1 -->
+            <div class="item">
 
-    padding: 13px 20px;
+                <div class="dot"></div>
 
-    border-radius: 8px;
+                <div class="media-card">
 
-    text-decoration: none;
+                    <div class="image-placeholder">
+                        Add your first project photo here
+                    </div>
 
-    font-weight: bold;
+                    <div class="media-info">
 
-}
+                        <div class="step">
+                            Step 1 · Starting Point
+                        </div>
 
-.button {
+                        <h3>Building on Digital Output</h3>
 
-    background: #6ee7b7;
+                        <p>
+                            I started with my previous experience controlling
+                            an LED with an Arduino. I wanted to challenge
+                            myself by using a different output component.
+                        </p>
 
-    color: #07140f;
+                    </div>
 
-}
+                </div>
 
-.button-outline {
+            </div>
 
-    border:
-        1px solid
-        rgba(255,255,255,0.2);
 
-    color: white;
+            <!-- STEP 2 -->
+            <div class="item">
 
-}
+                <div class="dot"></div>
 
+                <div class="media-card">
 
-/* ================================
-   HERO CARD
-================================ */
+                    <div class="image-placeholder">
+                        Add a photo of your keypad and buzzer here
+                    </div>
 
-.hero-card {
+                    <div class="media-info">
 
-    background: #141d33;
+                        <div class="step">
+                            Step 2 · New Components
+                        </div>
 
-    border:
-        1px solid
-        rgba(255,255,255,0.1);
+                        <h3>Adding the Piezo Buzzer and Keypad</h3>
 
-    padding: 40px;
+                        <p>
+                            I added a piezo buzzer and keypad to make my
+                            project more interactive. The keypad provides
+                            input while the buzzer acts as an output.
+                        </p>
 
-    border-radius: 20px;
+                    </div>
 
-    transform: rotate(2deg);
+                </div>
 
-}
+            </div>
 
-.hero-card p:first-child {
 
-    color: #7dd3fc;
+            <!-- STEP 3 -->
+            <div class="item">
 
-    font-size: 12px;
+                <div class="dot"></div>
 
-    font-weight: bold;
+                <div class="media-card">
 
-    letter-spacing: 2px;
+                    <div class="image-placeholder">
+                        Add a photo of your wiring here
+                    </div>
 
-}
+                    <div class="media-info">
 
-.hero-card h2 {
+                        <div class="step">
+                            Step 3 · Wiring
+                        </div>
 
-    font-size: 30px;
+                        <h3>Connecting the Circuit</h3>
 
-}
+                        <p>
+                            I connected the components to the Arduino and
+                            worked on getting the keypad and piezo buzzer
+                            communicating with the board.
+                        </p>
 
+                    </div>
 
-/* ================================
-   SECTIONS
-================================ */
+                </div>
 
-.section {
+            </div>
 
-    padding-top: 90px;
 
-}
+            <!-- STEP 4 -->
+            <div class="item">
 
-.section h2 {
+                <div class="dot"></div>
 
-    font-size: 45px;
+                <div class="media-card">
 
-    margin-top: 0;
+                    <div class="image-placeholder">
+                        Add a photo of your working circuit here
+                    </div>
 
-}
+                    <div class="media-info">
 
+                        <div class="step">
+                            Step 4 · Testing
+                        </div>
 
-/* ================================
-   CARDS
-================================ */
+                        <h3>Testing Different Notes</h3>
 
-.cards {
+                        <p>
+                            I experimented with the buzzer and learned that
+                            changing the frequency changes the note that the
+                            buzzer produces.
+                        </p>
 
-    display: grid;
+                    </div>
 
-    grid-template-columns:
-        repeat(
-            3,
-            1fr
-        );
+                </div>
 
-    gap: 20px;
+            </div>
 
-}
 
-.card {
+            <!-- STEP 5 -->
+            <div class="item">
 
-    background: #141d33;
+                <div class="dot"></div>
 
-    border:
-        1px solid
-        rgba(255,255,255,0.1);
+                <div class="media-card">
 
-    padding: 30px;
+                    <div class="image-placeholder">
+                        Add your final project photo or video here
+                    </div>
 
-    border-radius: 16px;
+                    <div class="media-info">
 
-}
+                        <div class="step">
+                            Step 5 · Final Build
+                        </div>
 
-.card h2,
-.card h3 {
+                        <h3>My Final Working Circuit</h3>
 
-    margin-top: 0;
+                        <p>
+                            After testing and making changes, I created my
+                            final Arduino circuit using the keypad and piezo
+                            buzzer.
+                        </p>
 
-}
+                    </div>
 
-.card p {
+                </div>
 
-    color: #aeb8cc;
+            </div>
 
-}
+        </div>
 
+    </section>
 
-/* ================================
-   FEATURED PROJECT
-================================ */
 
-.featured {
+    <!-- WHAT DIDN'T WORK -->
+    <section class="section">
 
-    margin-top: 100px;
+        <div class="section-head">
 
-    padding: 45px;
+            <h2>Challenges & Changes</h2>
 
-    background:
-        rgba(
-            110,
-            231,
-            183,
-            0.06
-        );
+            <p>Learning through trial and error</p>
 
-    border:
-        1px solid
-        rgba(110,231,183,0.2);
+        </div>
 
-    border-radius: 20px;
 
-}
+        <div class="info-box">
 
-.featured h2 {
+            <h3>What I Tried</h3>
 
-    font-size: 42px;
+            <p>
+                During the project, I tested different ways of connecting
+                and programming the components. Not everything worked
+                immediately, so I had to troubleshoot the circuit and make
+                changes.
+            </p>
 
-    margin: 10px 0;
+            <br>
 
-}
+            <p>
+                <strong>What didn't work:</strong>
+                Add the specific problem you experienced here.
+            </p>
 
-.featured p {
+            <p>
+                <strong>What I changed:</strong>
+                Add what you changed to fix the problem here.
+            </p>
 
-    color: #aeb8cc;
+        </div>
 
-    max-width: 750px;
+    </section>
 
-}
 
-.featured a {
+    <!-- FINAL CODE -->
+    <section class="section">
 
-    color: #6ee7b7;
+        <div class="section-head">
 
-    text-decoration: none;
+            <h2>Final Arduino Code</h2>
 
-    font-weight: bold;
+            <p>My working program</p>
 
-}
+        </div>
 
 
-/* ================================
-   OTHER PAGES
-================================ */
+        <div class="info-box">
 
-.page {
+            <p>
+                This is the final code I used for my Arduino project.
+            </p>
 
-    padding-top: 80px;
+            <details>
 
-}
+                <summary>
+                    View my Arduino code
+                </summary>
 
-.page-header {
+                <pre class="codebox">
+// Paste your final Arduino code here
 
-    max-width: 800px;
+// Example:
+// tone(buzzerPin, 440);
+// delay(500);
+// noTone(buzzerPin);
+                </pre>
 
-    padding-bottom: 60px;
+            </details>
 
-}
+        </div>
 
-.page-header h1 {
+    </section>
 
-    font-size: 70px;
 
-    margin: 10px 0;
+    <!-- PEER SUPPORT -->
+    <section class="section">
 
-}
+        <div class="section-head">
 
-.intro {
+            <h2>Peer Support</h2>
 
-    color: #aeb8cc;
+            <p>Learning with classmates</p>
 
-    font-size: 20px;
+        </div>
 
-}
 
+        <div class="info-box">
 
-/* ================================
-   FOOTER
-================================ */
+            <h3>Working With Others</h3>
 
-footer {
+            <p>
+                Add your peer support reflection here. Explain who helped
+                you, what they helped you with, and whether you helped
+                someone else with their project.
+            </p>
 
-    text-align: center;
+        </div>
 
-    padding: 30px;
+    </section>
 
-    border-top:
-        1px solid
-        rgba(255,255,255,0.1);
 
-    color: #7f8ba3;
+    <!-- REFLECTION -->
+    <section class="section" id="reflection">
 
-}
+        <div class="section-head">
 
+            <h2>Reflection</h2>
 
-/* ================================
-   MOBILE
-================================ */
+            <p>Looking beyond this project</p>
 
-@media (max-width: 800px) {
+        </div>
 
-    nav {
 
-        flex-direction: column;
+        <div class="info-box">
 
-        gap: 15px;
+            <h3>How Could This Be Useful?</h3>
 
-    }
+            <p>
+                A project like this could be useful for someone who needs
+                an interactive way to practice recognizing sounds, notes,
+                or keypad inputs. For example, it could eventually become
+                a small educational game that uses different sounds as
+                feedback.
+            </p>
 
-    .hero {
+            <br>
 
-        grid-template-columns: 1fr;
+            <h3>What Would Need to Change?</h3>
 
-        padding: 80px 0;
+            <p>
+                To make my current build useful in a real situation, I would
+                need to make the circuit more durable and create a better
+                enclosure for the components. I could also add a display or
+                other feedback system to make it easier for someone to use.
+            </p>
 
-    }
+            <br>
 
-    .hero-card {
+            <h3>The Skill I Would Rely On Most</h3>
 
-        transform: none;
+            <p>
+                The skill I would rely on most is debugging. As I continue
+                developing the project, I would need to carefully check my
+                wiring, code, and component behavior whenever something does
+                not work as expected.
+            </p>
 
-    }
+        </div>
 
-    .cards {
+    </section>
 
-        grid-template-columns: 1fr;
 
-    }
+    <!-- FOOTER -->
+    <footer>
 
-    .hero h1 {
+        © Ava · Innovator Journal · Arduino Project
 
-        font-size: 60px;
+    </footer>
 
-    }
-
-    .page-header h1 {
-
-        font-size: 55px;
-
-    }
-}
-```
+</body>
+</html>
