@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innovator Journal: Piezo Buzzer + Keypad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F1F4F8;
+    --panel: #FFFFFF;
+    --ink: #1B2A41;
+    --muted: #55637A;
+    --line: #C9D3E0;
+    --signal: #2F5BFF;
+    --amber: #FFB627;
+    --todo: #FFF6DC;
+    --code-bg: #182235;
+    --code-ink: #E6EDF7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #131B29; --panel: #1B2638; --ink: #E8EEF8; --muted: #9AA9C2;
+      --line: #2E3C55; --signal: #7C9BFF; --todo: #3A3018; --code-bg: #0E1522;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-size: 1.15rem; line-height: 1.65;
+  }
+  h1, h2, h3, nav, button, .keypad, summary, .label {
+    font-family: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--signal); }
+  :focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+
+  nav {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: baseline;
+    padding: 1rem clamp(1rem, 5vw, 3rem); border-bottom: 1px solid var(--line);
+    font-weight: 500; font-size: 1rem;
+  }
+  nav .site { font-weight: 800; margin-right: auto; color: var(--ink); text-decoration: none; }
+  nav a { text-decoration: none; color: var(--muted); }
+  nav a[aria-current="page"] { color: var(--ink); border-bottom: 2px solid var(--amber); }
+
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 clamp(1rem, 5vw, 3rem); }
+
+  /* Hero: the playable keypad is the memorable thing */
+  .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; padding: 3.5rem 0 3rem; }
+  .hero h1 { font-size: clamp(2.3rem, 5.5vw, 3.8rem); line-height: 1.02; font-weight: 800; margin: 0 0 1rem; letter-spacing: -0.02em; }
+  .hero p { max-width: 34rem; color: var(--muted); margin: 0 0 1rem; }
+  .tag { display: inline-block; font-family: "Bricolage Grotesque", sans-serif; font-size: .95rem; font-weight: 500; background: var(--amber); color: #1B2A41; padding: .15rem .7rem; border-radius: 999px; margin-bottom: 1rem; }
+
+  .device { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 1.25rem; }
+  .readout { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: .8rem 1rem; margin-bottom: 1rem; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1rem; min-height: 4.6rem; }
+  .readout .fn { color: var(--amber); font-size: 1.15rem; }
+  .readout .note { color: #9AA9C2; font-size: .9rem; }
+  .keypad { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; }
+  .keypad button {
+    aspect-ratio: 1; border: 1px solid var(--line); border-radius: 12px; cursor: pointer;
+    background: var(--paper); color: var(--ink); font-size: 1.4rem; font-weight: 700;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;
+    touch-action: manipulation; user-select: none;
+  }
+  .keypad button small { font-size: .7rem; font-weight: 500; color: var(--muted); }
+  .keypad button.on { background: var(--amber); color: #1B2A41; border-color: var(--amber); transform: translateY(2px); }
+  .keypad button.on small { color: #1B2A41; }
+  .hint { font-size: .9rem; color: var(--muted); margin: .8rem 0 0; }
+
+  /* Journal sections */
+  main section { padding: 2.5rem 0; border-top: 1px solid var(--line); }
+  main section > .cols { display: grid; grid-template-columns: 14rem 1fr; gap: 2rem; }
+  h2 { font-size: 1.5rem; line-height: 1.2; margin: 0; font-weight: 700; }
+  .body > *:first-child { margin-top: 0; }
+  .label { font-size: .95rem; color: var(--muted); margin: 0; }
+
+  .todo { background: var(--todo); border: 2px dashed var(--amber); border-radius: 10px; padding: 1rem 1.2rem; }
+  .todo strong { font-family: "Bricolage Grotesque", sans-serif; }
+  .todo ul { margin: .5rem 0 0; padding-left: 1.2rem; }
+
+  .source { display: inline-block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 500; border-left: 4px solid var(--signal); padding-left: .8rem; margin: .5rem 0; }
+
+  /* Photo gallery */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem; }
+  .gallery figure { margin: 0; }
+  .gallery .frame { display: block; width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); padding: 0; cursor: zoom-in; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery .missing { display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; height: 100%; color: var(--muted); font-size: .95rem; font-family: "Bricolage Grotesque", sans-serif; background: repeating-linear-gradient(45deg, var(--panel), var(--panel) 10px, var(--paper) 10px, var(--paper) 20px); }
+  .gallery figcaption { font-size: .95rem; color: var(--muted); margin-top: .4rem; }
+  dialog { border: none; border-radius: 14px; padding: 0; max-width: min(92vw, 900px); background: var(--panel); color: var(--ink); }
+  dialog::backdrop { background: rgba(10, 16, 28, .75); }
+  dialog img { display: block; max-width: 100%; max-height: 80vh; margin: 0 auto; }
+  dialog p { margin: 0; padding: .8rem 1rem; }
+  dialog button { position: absolute; top: .6rem; right: .6rem; }
+
+  /* Code */
+  .code-head { display: flex; justify-content: space-between; align-items: center; background: var(--code-bg); border-radius: 10px 10px 0 0; padding: .5rem .8rem; color: #9AA9C2; font-family: "Bricolage Grotesque", sans-serif; font-size: .9rem; }
+  .code-head button { background: transparent; border: 1px solid #45557A; color: var(--code-ink); border-radius: 6px; padding: .2rem .7rem; cursor: pointer; font-size: .85rem; }
+  pre { margin: 0; background: var(--code-bg); color: var(--code-ink); border-radius: 0 0 10px 10px; padding: 1rem; overflow-x: auto; font-size: .88rem; line-height: 1.55; }
+  pre code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+  details { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); margin: 0 0 .8rem; }
+  summary { cursor: pointer; padding: .9rem 1.1rem; font-weight: 700; font-size: 1.05rem; }
+  details[open] summary { border-bottom: 1px solid var(--line); }
+  details p { margin: 0; padding: .9rem 1.1rem; }
+
+  footer { border-top: 1px solid var(--line); padding: 2rem 0 3rem; color: var(--muted); font-size: .95rem; }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; gap: 2rem; padding-top: 2rem; }
+    main section > .cols { grid-template-columns: 1fr; gap: .8rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .keypad button.on { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Journal">
+  <a class="site" href="index.html">Innovator Journal</a>
+  <!-- Change these links to match your real file names -->
+  <a href="unit0.html">Unit 0</a>
+  <a href="unit1-piezo-keypad.html" aria-current="page">Unit 1: Arduino</a>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <span class="tag">Unit 1 summative</span>
+      <h1>From a blinking LED to playing notes</h1>
+      <p>I took digital output one step further: a piezo buzzer and a keypad on an Arduino Uno. Press a key on the keypad to hear the note it sends to the buzzer.</p>
+      <p>The demo here is in your browser, so you can try it with a mouse, a touch screen, or your keyboard.</p>
+    </div>
+
+    <div class="device">
+      <div class="readout" id="readout" aria-live="polite">
+        <div class="fn">tone(10, ---);</div>
+        <div class="note">Press a key to play a note</div>
+      </div>
+      <div class="keypad" id="keypad" role="group" aria-label="Playable keypad"></div>
+      <p class="hint">Keyboard works too: 0-9, A-D, * and #.</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="skill">
+      <div class="cols">
+        <h2>The skill I built on, and why</h2>
+        <div class="body">
+          <p>The skill I am building on is digital output. In class, I learned how to control an Arduino by making an LED flash off and on. I wanted to take this a step further by making the Arduino control something more interesting than just an LED. So, I decided to learn how to use a piezo buzzer.</p>
+          <p>I chose this because I was interested in how Arduino can combine electronics and programming to create something interactive. I also wanted to learn how different notes can be created using code.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="component">
+      <div class="cols">
+        <h2>The new components and where I learned them</h2>
+        <div class="body">
+          <p>The new components I used were a piezo buzzer and a keypad. I researched how to connect the piezo buzzer to an Arduino and learned that the <code>tone()</code> function can make the buzzer play different frequencies. Higher or lower frequencies create different musical notes.</p>
+          <p class="source">Sources: ChatGPT and Arduino</p>
+          <!-- Optional: add the exact Arduino page link, e.g. <a href="https://...">tone() reference</a> -->
+        </div>
+      </div>
+    </section>
+
+    <section id="tried">
+      <div class="cols">
+        <h2>What I tried, and what didn't work</h2>
+        <div class="body">
+          <div class="todo">
+            <strong>Write this part in your own words.</strong> Your teacher needs at least one thing that didn't work and what you changed because of it. Delete this box when you're done. Ideas to jog your memory:
+            <ul>
+              <li>Did the buzzer stay silent or sound wrong at first?</li>
+              <li>Did any keypad key press the wrong key, or nothing at all?</li>
+              <li>What did you check (wiring, pin numbers, code) and what fixed it?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="build">
+      <div class="cols">
+        <h2>Final circuit and code</h2>
+        <div class="body">
+          <p>Photos and videos of the finished build:</p>
+          <div class="gallery" id="gallery">
+            <!-- Put your photos in an "images" folder next to this file and match these names,
+                 or change the src to your file names. -->
+            <figure><button class="frame" type="button"><img src="images/breadboard.jpg" alt="Breadboard with piezo buzzer and keypad wired to an Arduino Uno"></button><figcaption>The full circuit on the breadboard</figcaption></figure>
+            <figure><button class="frame" type="button"><img src="images/keypad-close.jpg" alt="Close-up of the keypad wiring"></button><figcaption>Keypad wiring close-up</figcaption></figure>
+            <figure><button class="frame" type="button"><img src="images/buzzer.jpg" alt="Piezo buzzer connected to the Arduino"></button><figcaption>Piezo buzzer connection</figcaption></figure>
+          </div>
+          <!-- For a video, add: <video controls src="images/demo.mp4" style="max-width:100%;border-radius:12px"></video> -->
+
+          <div class="todo" style="margin-bottom:1.2rem">
+            <strong>Replace the code below with your real sketch.</strong> This is a starting example of a keypad that plays notes on a buzzer. Your pin numbers and notes may be different, so copy your own code from the Arduino IDE.
+          </div>
+
+          <div class="code-head"><span>keypad_buzzer.ino</span><button type="button" id="copy">Copy code</button></div>
+<pre><code id="sketch">#include &lt;Keypad.h&gt;
+
+const int BUZZER_PIN = 10;
+
+const byte ROWS = 4;
+const byte COLS = 4;
+char keys[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
+byte rowPins[ROWS] = {9, 8, 7, 6};
+byte colPins[COLS] = {5, 4, 3, 2};
+
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+// Frequency in Hz for each key (C major scale)
+int noteFor(char k) {
+  switch (k) {
+    case '1': return 262;  // C4
+    case '2': return 294;  // D4
+    case '3': return 330;  // E4
+    case 'A': return 349;  // F4
+    case '4': return 392;  // G4
+    case '5': return 440;  // A4
+    case '6': return 494;  // B4
+    case 'B': return 523;  // C5
+    case '7': return 587;  // D5
+    case '8': return 659;  // E5
+    case '9': return 698;  // F5
+    case 'C': return 784;  // G5
+    case '*': return 880;  // A5
+    case '0': return 988;  // B5
+    case '#': return 1047; // C6
+    case 'D': return 1175; // D6
+  }
+  return 0;
+}
+
+void setup() {
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop() {
+  char key = keypad.getKey();
+  if (key) {
+    tone(BUZZER_PIN, noteFor(key), 250);  // play for 250 ms
+  }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="peer">
+      <div class="cols">
+        <h2>Peer support</h2>
+        <div class="body">
+          <div class="todo">
+            <strong>Write about one real moment.</strong> Delete this box when you're done. Answer these in a few sentences:
+            <ul>
+              <li>What did you (or a classmate) need help with?</li>
+              <li>What did the other person actually do or say that helped?</li>
+              <li>Did it change what you did next, or how you thought about the problem?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflection">
+      <div class="cols">
+        <h2>Reflection</h2>
+        <div class="body">
+          <details open>
+            <summary>What problem could this be useful for, and for whom?</summary>
+            <p>This could be helpful for creating an alarm system.</p>
+          </details>
+          <details>
+            <summary>What would need to change to make it useful?</summary>
+            <p>I think the current build would need to be connected to something to actually be functional.</p>
+          </details>
+          <details>
+            <summary>Which skill from this unit would I rely on most?</summary>
+            <p>The wiring.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Innovator Journal, Tech &amp; Innovation, Unit 1: Electronics &amp; Arduino</footer>
+</div>
+
+<dialog id="viewer">
+  <button type="button" id="closeViewer" aria-label="Close photo">Close</button>
+  <img id="viewerImg" alt="">
+  <p id="viewerCap"></p>
+</dialog>
+
+<script>
+  // ---- Keypad demo (same key-to-note map as the Arduino sketch) ----
+  const LAYOUT = ['1','2','3','A','4','5','6','B','7','8','9','C','*','0','#','D'];
+  const NOTES = {
+    '1':[262,'C4'],'2':[294,'D4'],'3':[330,'E4'],'A':[349,'F4'],
+    '4':[392,'G4'],'5':[440,'A4'],'6':[494,'B4'],'B':[523,'C5'],
+    '7':[587,'D5'],'8':[659,'E5'],'9':[698,'F5'],'C':[784,'G5'],
+    '*':[880,'A5'],'0':[988,'B5'],'#':[1047,'C6'],'D':[1175,'D6']
+  };
+  const pad = document.getElementById('keypad');
+  const readout = document.getElementById('readout');
+  const buttons = {};
+  let ctx = null;
+  const playing = {};
+
+  LAYOUT.forEach(k => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = k + '<small>' + NOTES[k][1] + '</small>';
+    b.setAttribute('aria-label', 'Key ' + k + ', note ' + NOTES[k][1]);
+    b.addEventListener('pointerdown', e => { e.preventDefault(); start(k); });
+    ['pointerup','pointerleave','pointercancel'].forEach(ev => b.addEventListener(ev, () => stop(k)));
+    pad.appendChild(b);
+    buttons[k] = b;
+  });
+
+  function start(k) {
+    if (playing[k]) return;
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';               // a piezo sounds buzzy, like a square wave
+    osc.frequency.value = NOTES[k][0];
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.01);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    playing[k] = { osc, gain };
+    buttons[k].classList.add('on');
+    readout.innerHTML = '<div class="fn">tone(10, ' + NOTES[k][0] + ');</div>' +
+      '<div class="note">Key ' + k + ' plays ' + NOTES[k][1] + ' at ' + NOTES[k][0] + ' Hz</div>';
+  }
+
+  function stop(k) {
+    const p = playing[k];
+    if (!p) return;
+    p.gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+    p.osc.stop(ctx.currentTime + 0.06);
+    delete playing[k];
+    buttons[k].classList.remove('on');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.length === 1 ? e.key.toUpperCase() : '';
+    if (NOTES[k]) start(k);
+  });
+  document.addEventListener('keyup', e => {
+    const k = e.key.length === 1 ? e.key.toUpperCase() : '';
+    if (NOTES[k]) stop(k);
+  });
+
+  // ---- Photo gallery: show a placeholder if an image file is missing, open a viewer on click ----
+  const viewer = document.getElementById('viewer');
+  document.querySelectorAll('#gallery figure').forEach(fig => {
+    const img = fig.querySelector('img');
+    const frame = fig.querySelector('.frame');
+    const cap = fig.querySelector('figcaption').textContent;
+    function showMissing() {
+      const src = img.getAttribute('src');
+      frame.innerHTML = '<span class="missing">Add your photo as ' + src + '</span>';
+      frame.style.cursor = 'default';
+      frame.dataset.missing = '1';
+    }
+    img.addEventListener('error', showMissing);
+    if (img.complete && img.naturalWidth === 0) showMissing();
+    frame.addEventListener('click', () => {
+      if (frame.dataset.missing) return;
+      document.getElementById('viewerImg').src = img.src;
+      document.getElementById('viewerImg').alt = img.alt;
+      document.getElementById('viewerCap').textContent = cap;
+      viewer.showModal();
+    });
+  });
+  document.getElementById('closeViewer').addEventListener('click', () => viewer.close());
+  viewer.addEventListener('click', e => { if (e.target === viewer) viewer.close(); });
+
+  // ---- Copy code ----
+  document.getElementById('copy').addEventListener('click', async e => {
+    const btn = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText(document.getElementById('sketch').textContent);
+      btn.textContent = 'Copied';
+    } catch (err) {
+      btn.textContent = 'Select the code and copy it';
+    }
+    setTimeout(() => btn.textContent = 'Copy code', 1800);
+  });
+</script>
+</body>
+</html>
