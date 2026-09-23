@@ -171,29 +171,50 @@
       </div>
     </section>
 
-    <section id="tried">
-      <div class="cols">
-        <h2>What I tried, and what didn't work</h2>
-        <div class="body">
-            <strong> At first, I did not understand how to make two lights work at different times with the wiring on the Arduino Breadboard, so I played around with it until I found that the wires have to go into different sides of the breadboard. Another thing that did not work at first was the keypad would not sync up to the Arduino Software, so it took a lot of failures to connect the keypad. </strong> 
-    <section id="build">
-      <div class="cols">
-        <h2>Final circuit and code</h2>
-        <div class="body">
-          <p>Photos and videos of the finished build:</p>
-          <div class="gallery" id="gallery">
-            <!-- Put your photos in an "images" folder next to this file and match these names,
-                 or change the src to your file names. -->
-            <img src="images/IMG_4491.JPEG" alt="Arduino BUzzer">
-            <img src="images/IMG_4507.JPEG" alt="Arduino BUzzer2">
-            <video controls src="images/My Movie 1.mp4" style="max-width:100%;border-radius:12px"></video> -->
+<section id="tried">
+  <div class="cols">
+    <h2>What I tried, and what didn't work</h2>
+    <div class="body">
+      <strong>
+        At first, I did not understand how to make two lights work at different
+        times with the wiring on the Arduino Breadboard, so I played around
+        with it until I found that the wires have to go into different sides
+        of the breadboard. Another thing that did not work at first was that the
+        keypad would not sync up to the Arduino Software, so it took a lot of
+        failures to connect the keypad.
+      </strong>
+    </div>
+  </div>
+</section>
 
+<section id="build">
+  <div class="cols">
+    <h2>Final circuit and code</h2>
+    <div class="body">
+      <p>Photos and videos of the finished build:</p>
 
+      <div class="gallery" id="gallery">
+        <img src="images/IMG_4491.JPEG" alt="Arduino Buzzer">
+        <img src="images/IMG_4507.JPEG" alt="Arduino Buzzer 2">
+        <video controls src="images/My Movie 1.mp4"
+               style="max-width:100%;border-radius:12px"></video>
+      </div>
 
-          <div class="code-head"><span>keypad_buzzer.ino</span><button type="button" id="copy">Copy code</button></div>
-<pre><code id="sketch">#include &lt;Keypad.h&gt;
+      <div class="code-head">
+        <span>keypad_buzzer.ino</span>
+        <button type="button" id="copy">Copy code</button>
+      </div>
 
- tone(BUZZER_PIN, noteFor(key), 250);  // play for 250 ms
+      <pre><code id="sketch">#include &lt;Keypad.h&gt;
+
+tone(BUZZER_PIN, noteFor(key), 250);  // play for 250 ms
+}</code></pre>
+
+    </div>
+  </div>
+</section>
+```
+
   }
   }</code></pre>
         </div>
