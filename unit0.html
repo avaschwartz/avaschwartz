@@ -163,7 +163,6 @@
   document.querySelectorAll('.frame').forEach(frame => {
     const img = frame.querySelector('img');
     function showMissing() {
-      frame.innerHTML = '<span class="missing">Photo not found. Add it as ' + img.getAttribute('src') + '</span>';
       frame.style.cursor = 'default';
       frame.dataset.missing = '1';
     }
