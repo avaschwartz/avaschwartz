@@ -1,0 +1,487 @@
+```css
+/* ================================
+   GENERAL
+================================ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    background: #0b1020;
+
+    color: #f5f7fb;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    line-height: 1.6;
+}
+
+
+/* ================================
+   NAVIGATION
+================================ */
+
+header {
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.1);
+
+    background: #0b1020;
+
+}
+
+nav {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 22px 25px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.logo {
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+}
+
+.nav-links {
+
+    display: flex;
+
+    gap: 30px;
+
+}
+
+.nav-links a {
+
+    color: #aeb8cc;
+
+    text-decoration: none;
+
+    transition: 0.2s;
+
+}
+
+.nav-links a:hover {
+
+    color: #6ee7b7;
+
+}
+
+
+/* ================================
+   MAIN
+================================ */
+
+main {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 0 25px 80px;
+
+}
+
+
+/* ================================
+   HERO
+================================ */
+
+.hero {
+
+    min-height: 650px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.2fr
+        0.8fr;
+
+    align-items: center;
+
+    gap: 70px;
+
+}
+
+.small-title {
+
+    color: #6ee7b7;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+}
+
+.hero h1 {
+
+    font-size:
+        clamp(
+            55px,
+            8vw,
+            90px
+        );
+
+    line-height: 0.95;
+
+    letter-spacing: -4px;
+
+    margin: 15px 0 30px;
+
+}
+
+.hero h1 span {
+
+    color: #6ee7b7;
+
+}
+
+.hero p {
+
+    color: #aeb8cc;
+
+    max-width: 650px;
+
+    font-size: 18px;
+
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+.buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 30px;
+
+    flex-wrap: wrap;
+
+}
+
+.button,
+.button-outline {
+
+    padding: 13px 20px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+}
+
+.button {
+
+    background: #6ee7b7;
+
+    color: #07140f;
+
+}
+
+.button-outline {
+
+    border:
+        1px solid
+        rgba(255,255,255,0.2);
+
+    color: white;
+
+}
+
+
+/* ================================
+   HERO CARD
+================================ */
+
+.hero-card {
+
+    background: #141d33;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.1);
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    transform: rotate(2deg);
+
+}
+
+.hero-card p:first-child {
+
+    color: #7dd3fc;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+}
+
+.hero-card h2 {
+
+    font-size: 30px;
+
+}
+
+
+/* ================================
+   SECTIONS
+================================ */
+
+.section {
+
+    padding-top: 90px;
+
+}
+
+.section h2 {
+
+    font-size: 45px;
+
+    margin-top: 0;
+
+}
+
+
+/* ================================
+   CARDS
+================================ */
+
+.cards {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 20px;
+
+}
+
+.card {
+
+    background: #141d33;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.1);
+
+    padding: 30px;
+
+    border-radius: 16px;
+
+}
+
+.card h2,
+.card h3 {
+
+    margin-top: 0;
+
+}
+
+.card p {
+
+    color: #aeb8cc;
+
+}
+
+
+/* ================================
+   FEATURED PROJECT
+================================ */
+
+.featured {
+
+    margin-top: 100px;
+
+    padding: 45px;
+
+    background:
+        rgba(
+            110,
+            231,
+            183,
+            0.06
+        );
+
+    border:
+        1px solid
+        rgba(110,231,183,0.2);
+
+    border-radius: 20px;
+
+}
+
+.featured h2 {
+
+    font-size: 42px;
+
+    margin: 10px 0;
+
+}
+
+.featured p {
+
+    color: #aeb8cc;
+
+    max-width: 750px;
+
+}
+
+.featured a {
+
+    color: #6ee7b7;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+}
+
+
+/* ================================
+   OTHER PAGES
+================================ */
+
+.page {
+
+    padding-top: 80px;
+
+}
+
+.page-header {
+
+    max-width: 800px;
+
+    padding-bottom: 60px;
+
+}
+
+.page-header h1 {
+
+    font-size: 70px;
+
+    margin: 10px 0;
+
+}
+
+.intro {
+
+    color: #aeb8cc;
+
+    font-size: 20px;
+
+}
+
+
+/* ================================
+   FOOTER
+================================ */
+
+footer {
+
+    text-align: center;
+
+    padding: 30px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.1);
+
+    color: #7f8ba3;
+
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 800px) {
+
+    nav {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+    .hero {
+
+        grid-template-columns: 1fr;
+
+        padding: 80px 0;
+
+    }
+
+    .hero-card {
+
+        transform: none;
+
+    }
+
+    .cards {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .hero h1 {
+
+        font-size: 60px;
+
+    }
+
+    .page-header h1 {
+
+        font-size: 55px;
+
+    }
+
+}
+```
